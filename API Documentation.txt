@@ -1,0 +1,172 @@
+## Authentication Service API Documentation
+------------------------------------------------------------------------------------------------------------------------
+
+1. Send User PIN
+- Endpoint: `/auth/verify/user/email/send-pin`
+- Purpose: Sends a PIN to the user's email address for verification.
+- Method: POST
+- Request Body:
+{
+  "email": "user@example.com"
+}
+- Response Body:
+    - Contains the generated PIN.
+
+--------
+
+2. Send PIN to Parent for Child Linking
+- Endpoint: `/auth/link/child/parent/send-pin`
+- Purpose: Sends a PIN to the parent's email address to verify parent-child relationship.
+- Method: POST
+- Request Body:
+{
+  "childEmail": "child@example.com",
+  "parentEmail": "parent@example.com"
+}
+- Response Body:
+    - Contains the generated PIN.
+
+--------
+
+3. Send PIN to Doctor for Child Linking
+- Endpoint: `/auth/link/child/doctor/send-pin`
+- Purpose: Sends a PIN to the doctor's email address for linking with a child.
+- Method: POST
+- Request Body:
+{
+  "childEmail": "child@example.com",
+  "doctorEmail": "doctor@example.com"
+}
+- Response Body:
+    - Contains the generated PIN.
+
+--------
+
+4. Confirm Child Linking with Doctor
+- Endpoint: `/auth/link/child/doctor/confirmed`
+- Purpose: Confirms the linking of a child with a doctor.
+- Method: POST
+- Request Body:
+{
+  "childEmail": "child@example.com",
+  "doctorEmail": "doctor@example.com"
+}
+- Request Headers:
+    - Authorization: Bearer <token>
+- Response Body:
+    - Success message indicating successful linking.
+
+--------
+
+5. Register Child
+- Endpoint: `/auth/register/child`
+- Purpose: Registers a new child user.
+- Method: POST
+- Request Body:
+    - Contains child registration data.
+- Response Body:
+    - JWT token for authenticated access.
+
+--------
+
+6. Register Parent
+- Endpoint: `/auth/register/parent`
+- Purpose: Registers a new parent user.
+- Method: POST
+- Request Body:
+    - Contains parent registration data.
+- Response Body:
+    - JWT token for authenticated access.
+
+--------
+
+7. Register Doctor
+- Endpoint: `/auth/register/doctor`
+- Purpose: Registers a new doctor user.
+- Method: POST
+- Request Body:
+    - Contains doctor registration data.
+- Response Body:
+    - JWT token for authenticated access.
+
+--------
+
+8. Verify User Information
+
+- Endpoint: `/auth/login/user`
+- Purpose: Verifies user login information.
+- Method: POST
+- Request Body:
+    - Contains user login data.
+- Response Body:
+    - JWT token for authenticated access.
+
+--------
+
+
+9. Validate User Token
+- Endpoint: `/auth/validate/user/token`
+- Purpose: Validates the authenticity of the user's JWT token.
+- Method: POST
+- Request Headers:
+    - Authorization: Bearer <token>
+- Response Body:
+    - Boolean indicating token validity.
+- Client-side Usage (Android - Kotlin):
+
+
+## Some APIs related to getting user information
+------------------------------------------------------------------------------------------------------------------------
+
+1. Get Parent Email
+- Endpoint: /auth/get/child/parent
+- Purpose: Retrieves the email address of the parent associated with the authenticated child user.
+- Method: GET
+- Request Headers:
+  - Authorization: Bearer <token>
+- Response Body:
+  - Parent email address.
+
+--------
+
+2. Get Doctor Email
+- Endpoint: /auth/get/child/doctor
+- Purpose: Retrieves the email address of the doctor associated with the authenticated child user.
+- Method: GET
+- Request Headers:
+  - Authorization: Bearer <token>
+- Response Body:
+  - Doctor email address.
+
+--------
+
+3. Get Username
+- Endpoint: /auth/get/username
+- Purpose: Retrieves the username associated with the authenticated user.
+- Method: GET
+- Request Headers:
+  - Authorization: Bearer <token>
+- Response Body:
+  - Username.
+
+--------
+
+4. Fetch Parent's Children Emails
+- Endpoint: /auth/get/parent/children
+- Purpose: Retrieves the email addresses of children associated with the authenticated parent user.
+- Method: GET
+- Request Headers:
+  - Authorization: Bearer <token>
+- Response Body:
+  - List of child email addresses.
+
+--------
+
+5. Fetch Doctor's Children Emails
+- Endpoint: /auth/get/doctor/children
+- Purpose: Retrieves the email addresses of children associated with the authenticated doctor user.
+- Method: GET
+- Request Headers:
+  - Authorization: Bearer <token>
+- Response Body:
+  - List of child email addresses.
