@@ -20,14 +20,18 @@ public class AuthenticationController {
     private final ChildLinkingHelper childLinkingHelper;
     private final UserRegistrationPinHelper userRegistrationPinHelper;
     private final UserRegistrationHelper userRegistrationHelper;
+    private final UserInfoHelper userInfoHelper;
 
     @Autowired
     public AuthenticationController(ChildLinkingHelper childLinkingHelper,
                                     UserRegistrationPinHelper userRegistrationPinHelper,
-                                    UserRegistrationHelper userRegistrationHelper) {
+                                    UserRegistrationHelper userRegistrationHelper,
+                                    UserInfoHelper userInfoHelper) {
+
         this.childLinkingHelper = childLinkingHelper;
         this.userRegistrationPinHelper = userRegistrationPinHelper;
         this.userRegistrationHelper = userRegistrationHelper;
+        this.userInfoHelper = userInfoHelper;
     }
 
     @PostMapping("verify/user/email/send-pin")
@@ -98,7 +102,7 @@ public class AuthenticationController {
         }
 
         userRegistrationHelper.registerChild(childData);
-        String token = JwtTokenUtil.generateToken(childData.getEmail(), UserType.CHILD);
+        String token = JwtTokenUtil.generateToken(childData.getEmail(), childData.getUsername(), UserType.CHILD);
         return ResponseEntity.ok().body(token);
     }
 
@@ -109,7 +113,7 @@ public class AuthenticationController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid request: " + bindingResult.getAllErrors());
         }
         userRegistrationHelper.registerParent(parentRegistrationData);
-        String token = JwtTokenUtil.generateToken(parentRegistrationData.getEmail(), UserType.PARENT);
+        String token = JwtTokenUtil.generateToken(parentRegistrationData.getEmail(), parentRegistrationData.getUsername(), UserType.PARENT);
         return ResponseEntity.ok().body(token);
     }
 
@@ -120,7 +124,7 @@ public class AuthenticationController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid request: " + bindingResult.getAllErrors());
         }
         userRegistrationHelper.registerDoctor(doctorRegistrationData);
-        String token = JwtTokenUtil.generateToken(doctorRegistrationData.getEmail(), UserType.DOCTOR);
+        String token = JwtTokenUtil.generateToken(doctorRegistrationData.getEmail(), doctorRegistrationData.getUsername(), UserType.DOCTOR);
         return ResponseEntity.ok().body(token);
     }
 
@@ -133,7 +137,10 @@ public class AuthenticationController {
         if (!userRegistrationHelper.verifyUserInfo(userData)) {
             return ResponseEntity.badRequest().body("Invalid username or password");
         }
-        String token = JwtTokenUtil.generateToken(userData.getEmail(), userData.getUserType());
+        String email = userData.getEmail();
+        UserType userType = userData.getUserType();
+        String username = userInfoHelper.getUsername(email, userType);
+        String token = JwtTokenUtil.generateToken(userData.getEmail(), username, userData.getUserType());
         return ResponseEntity.ok().body(token);
     }
 

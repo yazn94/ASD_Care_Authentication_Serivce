@@ -24,9 +24,7 @@ public class UserInfoHelper {
         return dao.getDoctorEmail(childEmail);
     }
 
-    public String getUsername(String token) {
-        String email = JwtTokenUtil.getEmailFromToken(token);
-        UserType userType = JwtTokenUtil.getUserTypeFromToken(token);
+    public String getUsername(String email, UserType userType) {
         return dao.getUsername(email, userType);
     }
 
