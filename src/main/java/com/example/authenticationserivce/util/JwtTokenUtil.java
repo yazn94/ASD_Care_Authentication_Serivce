@@ -15,6 +15,12 @@ public class JwtTokenUtil {
     private static final byte[] SECRET_KEY_BYTES = SECRET_KEY.getBytes();
     private static final long EXPIRATION_TIME = 365L * 24 * 60 * 60 * 1000; // 1 year in milliseconds
 
+    private static String trimToken(String token) {
+        token = StringOperations.removeBearerIfExist(token);
+        token = StringOperations.removeQuotesIfExist(token);
+        return token;
+    }
+
     public static String generateToken(String email, String username, UserType userType) {
         Date expirationDate = new Date(System.currentTimeMillis() + EXPIRATION_TIME);
         return Jwts.builder()
@@ -27,6 +33,7 @@ public class JwtTokenUtil {
     }
 
     public static String getEmailFromToken(String token) {
+        token = trimToken(token);
         return Jwts.parser()
                 .setSigningKey(SECRET_KEY_BYTES)
                 .parseClaimsJws(token)
@@ -35,6 +42,7 @@ public class JwtTokenUtil {
     }
 
     public static String getUsernameFromToken(String token) {
+        token = trimToken(token);
         return Jwts.parser()
                 .setSigningKey(SECRET_KEY_BYTES)
                 .parseClaimsJws(token)
@@ -43,6 +51,7 @@ public class JwtTokenUtil {
     }
 
     public static UserType getUserTypeFromToken(String token) {
+        token = trimToken(token);
         String userTypeString = Jwts.parser()
                 .setSigningKey(SECRET_KEY_BYTES)
                 .parseClaimsJws(token)
@@ -53,6 +62,7 @@ public class JwtTokenUtil {
     }
 
     public static boolean validateToken(String token) {
+        token = trimToken(token);
         try {
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(SECRET_KEY_BYTES).parseClaimsJws(token);
             System.out.println("Token successfully parsed and validated.");

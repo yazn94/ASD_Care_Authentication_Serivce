@@ -146,8 +146,6 @@ public class AuthenticationController {
 
     @PostMapping("validate/user/token")
     public ResponseEntity<Boolean> validateUserToken(@RequestHeader("Authorization") String token) {
-        token = StringOperations.removeBearerIfExist(token);
-        token = StringOperations.removeQuotesIfExist(token);
         boolean value = JwtTokenUtil.validateToken(token);
         return ResponseEntity.ok().body(value);
     }
