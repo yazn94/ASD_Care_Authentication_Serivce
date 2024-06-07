@@ -63,8 +63,16 @@
 - Endpoint: `/auth/register/child`
 - Purpose: Registers a new child user.
 - Method: POST
-- Request Body:
-    - Contains child registration data.
+- Request Body, example:
+    - Contains child registration data:
+    {
+      "email": "someone@sample.com",
+      "password": "password",
+      "firstName": "John",
+      "lastName": "Doe",
+      "parentEmail": "someparent@sample.com",
+      "dateOfBirth": "2002-01-01"
+    }
 - Response Body:
     - JWT token for authenticated access.
 

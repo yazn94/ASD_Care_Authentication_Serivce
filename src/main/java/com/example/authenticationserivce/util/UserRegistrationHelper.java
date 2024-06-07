@@ -28,7 +28,13 @@ public class UserRegistrationHelper {
         dao.registerUserAuthTables(childRegistrationData.getEmail(), hashedPassword, salt, UserType.CHILD);
 
         // registration in child profile
-        dao.registerChildProfile(childRegistrationData.getEmail(), childRegistrationData.getUsername(), childRegistrationData.getParentEmail(), childRegistrationData.getBirthDate());
+        dao.registerChildProfile(
+                childRegistrationData.getEmail(),
+                childRegistrationData.getFirstName(),
+                childRegistrationData.getLastName(),
+                childRegistrationData.getParentEmail(),
+                childRegistrationData.getBirthDate()
+        );
     }
 
     public void registerParent(ParentRegistrationData parentData) throws UserAlreadyExistsException {

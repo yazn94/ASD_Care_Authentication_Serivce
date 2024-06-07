@@ -102,7 +102,7 @@ public class AuthenticationController {
         }
 
         userRegistrationHelper.registerChild(childData);
-        String token = JwtTokenUtil.generateToken(childData.getEmail(), childData.getUsername(), UserType.CHILD);
+        String token = JwtTokenUtil.generateToken(childData.getEmail(), childData.getFirstName(), UserType.CHILD);
         return ResponseEntity.ok().body(token);
     }
 

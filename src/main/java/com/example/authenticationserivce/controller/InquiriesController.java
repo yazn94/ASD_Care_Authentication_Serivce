@@ -34,6 +34,7 @@ public class InquiriesController {
         return ResponseEntity.ok().body(userInfoHelper.getChildDoctorEmail(childEmail));
     }
 
+    // In case of child user, first name is returned as the username
     @GetMapping("/username")
     @ValidJwtToken
     public ResponseEntity<String> getUsername(@RequestHeader("Authorization") String token) {

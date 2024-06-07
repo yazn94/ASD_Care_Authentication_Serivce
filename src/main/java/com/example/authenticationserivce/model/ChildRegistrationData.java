@@ -19,7 +19,10 @@ public class ChildRegistrationData {
     String password;
     @NotNull
     @NotEmpty
-    String username;
+    String firstName;
+    @NotNull
+    @NotEmpty
+    String lastName;
     @Email
     @NotNull
     @NotEmpty
@@ -27,10 +30,11 @@ public class ChildRegistrationData {
     @NotNull
     LocalDate birthDate;
 
-    public ChildRegistrationData(String email, String password, String username, String parentEmail, LocalDate birthDate) throws DateOfBirthInFutureException {
+    public ChildRegistrationData(String email, String password, String firstName, String lastName, String parentEmail, LocalDate birthDate) throws DateOfBirthInFutureException {
         this.email = email;
         this.password = password;
-        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.parentEmail = parentEmail;
         setBirthDate(birthDate);
     }

@@ -65,7 +65,7 @@ public class DAO {
         }
     }
 
-    public void registerChildProfile(String email, String username, String parentEmail, LocalDate date) throws UserAlreadyExistsException {
+    public void registerChildProfile(String email, String firstName, String lastName, String parentEmail, LocalDate date) throws UserAlreadyExistsException {
         // Check if the child email already exists
         String query = "SELECT COUNT(*) FROM " + CHILD_PRO + " WHERE email = ?";
         Integer count = jdbcTemplate.queryForObject(query, new Object[]{email}, Integer.class);
@@ -74,10 +74,10 @@ public class DAO {
         }
 
         // Insert the child profile into the child_profile table
-        String insertQuery = "INSERT INTO " + CHILD_PRO + " (email, username, parentEmail, dataOfBirth, registerDate, currentPoints, pointsSystemAvailability, progress) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String insertQuery = "INSERT INTO " + CHILD_PRO + " (email, firstName, lastName, parentEmail, dateOfBirth, registerDate, currentPoints, pointsSystemAvailability, progress) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
-            jdbcTemplate.update(insertQuery, email, username, parentEmail, date,
+            jdbcTemplate.update(insertQuery, email, firstName, lastName, parentEmail, date,
                     (LocalDate.now()), 0, false, "{}");
         } catch (Exception e) {
             // Handle any exceptions
