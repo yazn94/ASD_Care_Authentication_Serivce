@@ -1,0 +1,39 @@
+Note: for more details about each and every API check API Documentation file.
+--------
+
+
+Parent Authentication Flow:
+* Parent should register first before the child, his registration is simple it only includes a pin to verify email.
+* when the parent enters his data, before we save him to the system we need to check if he owns the given email
+* front-end to make a call on this API `/auth/verify/user/email/send-pin` to send a pin to the given email
+* in the response of the request, front-end will receive the generated pin as well which is the same pin that was sent to the email
+* front-end to validate the pin that the parent entered with the pin that was received via API response.
+* Upon successful validation, front-end will make a call to this API `/auth/register/parent` to save all the collected information about the parent (email, password, username)
+* Upon successful registration, front-end will receive a JWT token with the response.
+* This token should be stored on the device of the user and should be sent with every request to the server (check API documentation to see examples about APIs that requires token)
+
+
+Doctor Authentication Flow:
+* Exact same process as the parent authentication flow.
+* Doctor is not required for the child to be registered, different from the parent which is required.
+
+Child Authentication Flow:
+* Parent after he's registered and have a record in the system should be linked with the child.
+* Parent is responsible to configure his child's account.
+* He will choose 'Register as a Child' from the main menu.
+* He will be prompted to enter the following information about his child: email, parent email, password, first name, last name, date of birth from a menu.
+* Second screen will be shown to enter a pin to verify child email(same process as the parent pin verification using API `/auth/verify/user/email/send-pin`)
+* Upon successful verification, he will also verify parent email.
+* if both succeeded  front-end will make a call to this API `/auth/register/child` to save all the collected information about the child.
+* Token received and saved on the device by the front-end.
+
+
+Important Note: when the user (any type) tries to open the app, front-end will look for the stored token:
+    - if the token exists, it will make a call to this API `/auth/validate/user/token` to validate the token.
+    - if there is no token or the token is not valid (expired after 1 year of usage), the user will be prompted to login again.
+
+
+User Login:
+* This flow should be triggered if the user logged out (Action Item: front-end to delete the stored token on the device when the user tries to logout) or when the token is expired.
+* There should be a general login screen for all users (parent, child, doctor) to enter their email and password and user type from a menu.
+* Upon successful login, front-end will receive a token that should be stored on the device and sent with every request to the server.

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
+// This model is used for login process for all user types.
 public class SharedRegistrationData {
     @NotNull
     @NotEmpty
