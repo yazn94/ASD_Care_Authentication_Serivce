@@ -5,6 +5,8 @@ import com.example.authenticationserivce.enums.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 
 @Service
@@ -35,5 +37,12 @@ public class UserInfoHelper {
 
     public ArrayList<String> getDoctorChildEmails(String doctorEmail) {
         return dao.getDoctorChildEmails(doctorEmail);
+    }
+
+    public int getChildAge(String token) {
+        String childEmail = JwtTokenUtil.getEmailFromToken(token);
+        LocalDate date = dao.getChildBirthDate(childEmail);
+        LocalDate now = LocalDate.now();
+        return Period.between(date, now).getYears();
     }
 }

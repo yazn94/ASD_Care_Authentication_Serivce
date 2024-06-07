@@ -11,8 +11,6 @@ import com.example.authenticationserivce.model.SharedRegistrationData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.print.Doc;
-
 @Service
 public class UserRegistrationHelper {
     private final DAO dao;
@@ -30,7 +28,7 @@ public class UserRegistrationHelper {
         dao.registerUserAuthTables(childRegistrationData.getEmail(), hashedPassword, salt, UserType.CHILD);
 
         // registration in child profile
-        dao.registerChildProfile(childRegistrationData.getEmail(), childRegistrationData.getUsername(), childRegistrationData.getParentEmail(), childRegistrationData.getAge());
+        dao.registerChildProfile(childRegistrationData.getEmail(), childRegistrationData.getUsername(), childRegistrationData.getParentEmail(), childRegistrationData.getBirthDate());
     }
 
     public void registerParent(ParentRegistrationData parentData) throws UserAlreadyExistsException {
@@ -44,7 +42,7 @@ public class UserRegistrationHelper {
         dao.registerParentProfile(parentData.getEmail(), parentData.getUsername());
     }
 
-    public void registerDoctor(DoctorRegistrationData doctorRegistrationData)  throws UserAlreadyExistsException {
+    public void registerDoctor(DoctorRegistrationData doctorRegistrationData) throws UserAlreadyExistsException {
         // registration in auth tables
         String password = doctorRegistrationData.getPassword();
         String salt = SaltGenerator.generateSalt();

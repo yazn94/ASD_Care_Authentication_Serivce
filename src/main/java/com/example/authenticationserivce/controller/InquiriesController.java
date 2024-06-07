@@ -52,4 +52,10 @@ public class InquiriesController {
     public ResponseEntity<?> fetchDoctorChildrenEmails(@RequestHeader("Authorization") String token) {
         return ResponseEntity.ok().body(userInfoHelper.getDoctorChildEmails(token));
     }
+
+    @GetMapping("/child/age")
+    @ValidJwtToken
+    public ResponseEntity<?> fetchChildAge(@RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok().body(userInfoHelper.getChildAge(token));
+    }
 }

@@ -52,7 +52,8 @@
   "doctorEmail": "doctor@example.com"
 }
 - Request Headers:
-    - Authorization: Bearer <token>
+    - Key: Authorization
+    - Value: token
 - Response Body:
     - Success message indicating successful linking.
 
@@ -109,7 +110,8 @@
 - Purpose: Validates the authenticity of the user's JWT token.
 - Method: POST
 - Request Headers:
-    - Authorization: Bearer <token>
+    - Key: Authorization
+    - Value: token
 - Response Body:
     - Boolean indicating token validity.
 - Client-side Usage (Android - Kotlin):
@@ -123,7 +125,8 @@
 - Purpose: Retrieves the email address of the parent associated with the authenticated child user.
 - Method: GET
 - Request Headers:
-  - Authorization: Bearer <token>
+    - Key: Authorization
+    - Value: token
 - Response Body:
   - Parent email address.
 
@@ -134,7 +137,8 @@
 - Purpose: Retrieves the email address of the doctor associated with the authenticated child user.
 - Method: GET
 - Request Headers:
-  - Authorization: Bearer <token>
+    - Key: Authorization
+    - Value: token
 - Response Body:
   - Doctor email address.
 
@@ -145,7 +149,8 @@
 - Purpose: Retrieves the username associated with the authenticated user.
 - Method: GET
 - Request Headers:
-  - Authorization: Bearer <token>
+    - Key: Authorization
+    - Value: token
 - Response Body:
   - Username.
 
@@ -156,7 +161,8 @@
 - Purpose: Retrieves the email addresses of children associated with the authenticated parent user.
 - Method: GET
 - Request Headers:
-  - Authorization: Bearer <token>
+    - Key: Authorization
+    - Value: token
 - Response Body:
   - List of child email addresses.
 
@@ -167,6 +173,19 @@
 - Purpose: Retrieves the email addresses of children associated with the authenticated doctor user.
 - Method: GET
 - Request Headers:
-  - Authorization: Bearer <token>
+    - Key: Authorization
+    - Value: token
 - Response Body:
   - List of child email addresses.
+
+--------
+
+6. Fetch Child's Age
+- Endpoint: /auth/get/child/age
+- Purpose: Retrieves the age of the authenticated child user to be shown on the home screen among other use cases.
+- Method: GET
+- Request Headers:
+    - Key: Authorization
+    - Value: token
+- Response Body:
+    - Age of the child as integer.

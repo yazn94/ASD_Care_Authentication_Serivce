@@ -1,8 +1,14 @@
 package com.example.authenticationserivce.model;
 
-import com.example.authenticationserivce.enums.UserType;
-import jakarta.validation.constraints.*;
+import com.example.authenticationserivce.custom_exceptions.DateOfBirthInFutureException;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
+import java.time.LocalDate;
+
+@Data
 public class ChildRegistrationData {
     @Email
     @NotNull
@@ -19,46 +25,21 @@ public class ChildRegistrationData {
     @NotEmpty
     String parentEmail;
     @NotNull
-    @Min(1)
-    int age;
+    LocalDate birthDate;
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
+    public ChildRegistrationData(String email, String password, String username, String parentEmail, LocalDate birthDate) throws DateOfBirthInFutureException {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getParentEmail() {
-        return parentEmail;
-    }
-
-    public void setParentEmail(String parentEmail) {
         this.parentEmail = parentEmail;
+        setBirthDate(birthDate);
     }
 
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
+    public void setBirthDate(LocalDate birthDate) throws DateOfBirthInFutureException {
+        // if the birthdate is after the current date, throw an exception
+        if (birthDate.isAfter(LocalDate.now())) {
+            throw new DateOfBirthInFutureException("Birth date cannot be after the current date");
+        }
+        this.birthDate = birthDate;
     }
 }

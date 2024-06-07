@@ -10,7 +10,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 @Service
@@ -65,7 +65,7 @@ public class DAO {
         }
     }
 
-    public void registerChildProfile(String email, String username, String parentEmail, int age) throws UserAlreadyExistsException {
+    public void registerChildProfile(String email, String username, String parentEmail, LocalDate date) throws UserAlreadyExistsException {
         // Check if the child email already exists
         String query = "SELECT COUNT(*) FROM " + CHILD_PRO + " WHERE email = ?";
         Integer count = jdbcTemplate.queryForObject(query, new Object[]{email}, Integer.class);
@@ -74,11 +74,11 @@ public class DAO {
         }
 
         // Insert the child profile into the child_profile table
-        String insertQuery = "INSERT INTO " + CHILD_PRO + " (email, username, parentEmail, age, registerDay, currentPoints, pointsSystemAvailability, progress) " +
+        String insertQuery = "INSERT INTO " + CHILD_PRO + " (email, username, parentEmail, dataOfBirth, registerDate, currentPoints, pointsSystemAvailability, progress) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try {
-            jdbcTemplate.update(insertQuery, email, username, parentEmail, age,
-                    new Timestamp(System.currentTimeMillis()), 0, false, "{}");
+            jdbcTemplate.update(insertQuery, email, username, parentEmail, date,
+                    (LocalDate.now()), 0, false, "{}");
         } catch (Exception e) {
             // Handle any exceptions
             e.printStackTrace();
@@ -94,9 +94,9 @@ public class DAO {
         }
 
         // Insert the parent profile into the parent_profile table
-        String insertQuery = "INSERT INTO " + PARENT_PRO + " (email, username, registerDay) VALUES (?, ?, ?)";
+        String insertQuery = "INSERT INTO " + PARENT_PRO + " (email, username, registerDate) VALUES (?, ?, ?)";
         try {
-            jdbcTemplate.update(insertQuery, email, username, new Timestamp(System.currentTimeMillis()));
+            jdbcTemplate.update(insertQuery, email, username, LocalDate.now());
         } catch (Exception e) {
             // Handle any exceptions
             e.printStackTrace();
@@ -112,9 +112,9 @@ public class DAO {
         }
 
         // Insert the doctor profile into the doctor_profile table
-        String insertQuery = "INSERT INTO " + DOCTOR_PRO + " (email, username, registerDay) VALUES (?, ?, ?)";
+        String insertQuery = "INSERT INTO " + DOCTOR_PRO + " (email, username, registerDate) VALUES (?, ?, ?)";
         try {
-            jdbcTemplate.update(insertQuery, email, username, new Timestamp(System.currentTimeMillis()));
+            jdbcTemplate.update(insertQuery, email, username, LocalDate.now());
         } catch (Exception e) {
             // Handle any exceptions
             e.printStackTrace();
@@ -180,6 +180,15 @@ public class DAO {
         String query = "SELECT email FROM " + CHILD_PRO + " WHERE doctorEmail = ?";
         try {
             return (ArrayList<String>) jdbcTemplate.queryForList(query, new Object[]{doctorEmail}, String.class);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    public LocalDate getChildBirthDate(String childEmail) {
+        String query = "SELECT dataOfBirth FROM " + CHILD_PRO + " WHERE email = ?";
+        try {
+            return jdbcTemplate.queryForObject(query, new Object[]{childEmail}, LocalDate.class);
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
