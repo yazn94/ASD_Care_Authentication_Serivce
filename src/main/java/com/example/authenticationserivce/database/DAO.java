@@ -23,6 +23,12 @@ public class DAO {
     private final String CHILD_PRO = "child_profile";
     private final String PARENT_PRO = "parent_profile";
     private final String DOCTOR_PRO = "doctor_profile";
+    private final String BASE_PROGRESS = "{\n" +
+            "    \"parentFeedback\": [],\n" +
+            "    \"machineLearningFeedback\": \"\",\n" +
+            "    \"gameSummaries\": [],\n" +
+            "    \"gamesPlayed\": 0\n" +
+            "}";
 
     @Autowired
     public DAO(JdbcTemplate jdbcTemplate) {
@@ -78,7 +84,7 @@ public class DAO {
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             jdbcTemplate.update(insertQuery, email, firstName, lastName, parentEmail, date,
-                    (LocalDate.now()), 0, false, "{}");
+                    (LocalDate.now()), 0, false, BASE_PROGRESS);
         } catch (Exception e) {
             // Handle any exceptions
             e.printStackTrace();
