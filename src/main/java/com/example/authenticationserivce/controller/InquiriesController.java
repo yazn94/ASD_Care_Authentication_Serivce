@@ -1,14 +1,13 @@
 package com.example.authenticationserivce.controller;
 
 import com.example.authenticationserivce.custom_annotations.ValidJwtToken;
+import com.example.authenticationserivce.model.EmailRequest;
 import com.example.authenticationserivce.util.JwtTokenUtil;
 import com.example.authenticationserivce.util.UserInfoHelper;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("auth/get")
@@ -58,5 +57,19 @@ public class InquiriesController {
     @ValidJwtToken
     public ResponseEntity<?> fetchChildAge(@RequestHeader("Authorization") String token) {
         return ResponseEntity.ok().body(userInfoHelper.getChildAge(token));
+    }
+
+    @GetMapping("/parent/child/age")
+    @ValidJwtToken
+    public ResponseEntity<?> fetchParentChildAge(@RequestHeader("Authorization") String token, @Valid @RequestBody EmailRequest childEmail) {
+        String parentEmail = JwtTokenUtil.getEmailFromToken(token);
+        return ResponseEntity.ok().body(userInfoHelper.getChildAgeForParent(parentEmail, childEmail.getEmail()));
+    }
+
+    @GetMapping("/doctor/child/age")
+    @ValidJwtToken
+    public ResponseEntity<?> fetchDoctorChildAge(@RequestHeader("Authorization") String token, @Valid @RequestBody EmailRequest childEmail) {
+        String doctorEmail = JwtTokenUtil.getEmailFromToken(token);
+        return ResponseEntity.ok().body(userInfoHelper.getChildAgeForDoctor(doctorEmail, childEmail.getEmail()));
     }
 }

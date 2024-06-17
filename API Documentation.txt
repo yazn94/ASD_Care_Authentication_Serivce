@@ -197,3 +197,38 @@
     - Value: token
 - Response Body:
     - Age of the child as integer.
+
+7. Fetch Parent's Child Age
+- Endpoint: /auth/get/parent/child/age
+- Purpose: Retrieves the age of a specific child associated with the authenticated parent user.
+- Method: GET
+- Request Headers:
+    - Key: Authorization
+    - Value: token
+- Request Body:
+    - key: email
+    - value: email of the child
+- Response Body:
+    - Age of the child as integer.
+
+Example:
+GET https://localhost:8080/auth/get/parent/child/age
+Authorization: <token>
+Content-Type: application/json
+
+{
+  "email": "yaznyousef94@gmail.com"
+}
+
+8. Fetch Doctor's Child Age
+- Endpoint: /auth/get/doctor/child/age
+- Purpose: Retrieves the age of a specific child associated with the authenticated doctor user.
+- Method: GET
+- Request Headers:
+    - Key: Authorization
+    - Value: token
+- Request Body:
+    - key: email
+    - value: email of the child
+- Response Body:
+    - Age of the child as integer.

@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 
 @Service
@@ -79,12 +80,13 @@ public class DAO {
             throw new UserAlreadyExistsException("Child with email " + email + " already exists.");
         }
 
+
         // Insert the child profile into the child_profile table
-        String insertQuery = "INSERT INTO " + CHILD_PRO + " (email, firstName, lastName, parentEmail, dateOfBirth, registerDate, currentPoints, pointsSystemAvailability, progress) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String insertQuery = "INSERT INTO " + CHILD_PRO + " (email, firstName, lastName, parentEmail, dateOfBirth, registerDate, currentPoints, pointsSystemAvailability, progress, totalPlayedGames) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             jdbcTemplate.update(insertQuery, email, firstName, lastName, parentEmail, date,
-                    (LocalDate.now()), 0, false, BASE_PROGRESS);
+                    (LocalDate.now()), 0, false, BASE_PROGRESS, 0);
         } catch (Exception e) {
             // Handle any exceptions
             e.printStackTrace();
@@ -172,7 +174,6 @@ public class DAO {
         }
     }
 
-
     public ArrayList<String> getParentChildEmails(String parentEmail) {
         String query = "SELECT email FROM " + CHILD_PRO + " WHERE parentEmail = ?";
         try {
@@ -192,12 +193,36 @@ public class DAO {
     }
 
     public LocalDate getChildBirthDate(String childEmail) {
-        String query = "SELECT dataOfBirth FROM " + CHILD_PRO + " WHERE email = ?";
+        String query = "SELECT dateOfBirth FROM " + CHILD_PRO + " WHERE email = ?";
         try {
             return jdbcTemplate.queryForObject(query, new Object[]{childEmail}, LocalDate.class);
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
+    }
+
+    public int getChildAgeForParent(String parentEmail, String childEmail) {
+        // Check if the child email belongs to the given parent
+        String parentQuery = "SELECT parentEmail FROM " + CHILD_PRO + " WHERE email = ?";
+        String actualParentEmail = jdbcTemplate.queryForObject(parentQuery, new Object[]{childEmail}, String.class);
+        if (!parentEmail.equals(actualParentEmail)) {
+            throw new IllegalArgumentException("The given child email does not belong to the provided parent email.");
+        }
+
+        // Calculate the age
+        return Period.between(getChildBirthDate(childEmail), LocalDate.now()).getYears();
+    }
+
+    public int getChildAgeForDoctor(String childEmail, String doctorEmail) {
+        // Check if the child email belongs to the given doctor
+        String doctorQuery = "SELECT doctorEmail FROM " + CHILD_PRO + " WHERE email = ?";
+        String actualDoctorEmail = jdbcTemplate.queryForObject(doctorQuery, new Object[]{childEmail}, String.class);
+        if (!doctorEmail.equals(actualDoctorEmail)) {
+            throw new IllegalArgumentException("The given child email does not belong to the provided doctor email.");
+        }
+
+        // Calculate the age
+        return Period.between(getChildBirthDate(childEmail), LocalDate.now()).getYears();
     }
 
     private String getAuthTableName(UserType userType) {

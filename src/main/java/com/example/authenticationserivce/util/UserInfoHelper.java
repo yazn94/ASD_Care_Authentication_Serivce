@@ -45,4 +45,12 @@ public class UserInfoHelper {
         LocalDate now = LocalDate.now();
         return Period.between(date, now).getYears();
     }
+
+    public int getChildAgeForParent(String parentEmail, String childEmail) {
+        return dao.getChildAgeForParent(parentEmail, childEmail);
+    }
+
+    public int getChildAgeForDoctor(String doctorEmail, String childEmail) {
+        return dao.getChildAgeForDoctor(doctorEmail, childEmail);
+    }
 }
