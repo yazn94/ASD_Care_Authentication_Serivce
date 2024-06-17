@@ -71,7 +71,7 @@
       "firstName": "John",
       "lastName": "Doe",
       "parentEmail": "someparent@sample.com",
-      "dateOfBirth": "2002-01-01"
+      "birthDate": "2002-01-01"
     }
 - Response Body:
     - JWT token for authenticated access.
