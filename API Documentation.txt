@@ -154,7 +154,7 @@
 
 3. Get Username
 - Endpoint: /auth/get/username
-- Purpose: Retrieves the username associated with the authenticated user.
+- Purpose: Retrieves the username associated with the authenticated user. (First name in case of child users)
 - Method: GET
 - Request Headers:
     - Key: Authorization

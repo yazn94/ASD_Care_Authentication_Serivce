@@ -4,6 +4,8 @@ import com.example.authenticationserivce.custom_annotations.ValidJwtToken;
 import com.example.authenticationserivce.enums.UserType;
 import com.example.authenticationserivce.model.EmailRequest;
 import com.example.authenticationserivce.util.JwtTokenUtil;
+import com.example.authenticationserivce.util.StringOperations;
+import com.example.authenticationserivce.util.UserContactsHelper;
 import com.example.authenticationserivce.util.UserInfoHelper;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +16,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("auth/get")
 public class InquiriesController {
     private final UserInfoHelper userInfoHelper;
+    private final UserContactsHelper userContactsHelper;
 
     @Autowired
-    public InquiriesController(UserInfoHelper userInfoHelper) {
+    public InquiriesController(UserInfoHelper userInfoHelper, UserContactsHelper userContactsHelper) {
         this.userInfoHelper = userInfoHelper;
+        this.userContactsHelper = userContactsHelper;
     }
+
 
     @GetMapping("/child/parent")
     @ValidJwtToken
@@ -85,5 +90,23 @@ public class InquiriesController {
     public ResponseEntity<?> fetchDoctorChildAge(@RequestHeader("Authorization") String token, @Valid @RequestBody EmailRequest childEmail) {
         String doctorEmail = JwtTokenUtil.getEmailFromToken(token);
         return ResponseEntity.ok().body(userInfoHelper.getChildAgeForDoctor(doctorEmail, childEmail.getEmail()));
+    }
+
+
+    @GetMapping("/chat/user/contacts/{email}")
+    public ResponseEntity<String> getContacts(@RequestHeader("Authorization") String token, @PathVariable String email) {
+        token = StringOperations.removeBearerIfExist(token);
+        token = StringOperations.removeQuotesIfExist(token);
+
+        if (!JwtTokenUtil.validateToken(token) || !JwtTokenUtil.getEmailFromToken(token).equals(email)) {
+            return ResponseEntity.badRequest().body("Invalid token");
+        }
+        if (JwtTokenUtil.getUserTypeFromToken(token) == UserType.DOCTOR) {
+            return ResponseEntity.ok().body(userContactsHelper.getDoctorContacts(email));
+        } else if (JwtTokenUtil.getUserTypeFromToken(token) == UserType.PARENT) {
+            return ResponseEntity.ok().body(userContactsHelper.getParentContacts(email));
+        } else {
+            return ResponseEntity.badRequest().body("Child users are not allowed to chat");
+        }
     }
 }

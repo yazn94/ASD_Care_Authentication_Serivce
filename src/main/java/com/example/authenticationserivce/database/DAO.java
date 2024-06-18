@@ -3,6 +3,7 @@ package com.example.authenticationserivce.database;
 import com.example.authenticationserivce.custom_exceptions.DoctorDoesNotExistException;
 import com.example.authenticationserivce.custom_exceptions.UserAlreadyExistsException;
 import com.example.authenticationserivce.enums.UserType;
+import com.example.authenticationserivce.model.ContactDTO;
 import com.example.authenticationserivce.model.MentorChildrenEmailAndNames;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -170,7 +171,7 @@ public class DAO {
         String tableName = getProfileTableName(userType);
         String usernameField = getUserName(userType);
         String query = "SELECT " + usernameField + " FROM " + tableName + " WHERE email = ?";
-        
+
         try {
             return jdbcTemplate.queryForObject(query, new Object[]{email}, String.class);
         } catch (EmptyResultDataAccessException e) {
@@ -258,6 +259,45 @@ public class DAO {
             return null;
         }
     }
+
+    public ArrayList<ContactDTO> getParentContacts(String parentEmail) {
+        String query = "SELECT doctorEmail FROM " + CHILD_PRO + " WHERE parentEmail = ?";
+        try {
+            ArrayList<String> doctorsEmails = (ArrayList<String>) jdbcTemplate.queryForList(query, new Object[]{parentEmail}, String.class);
+            ArrayList<ContactDTO> doctors = new ArrayList<>();
+
+            for (String doctorEmail : doctorsEmails) {
+                ContactDTO dto = new ContactDTO();
+                dto.setEmail(doctorEmail);
+                query = "SELECT username FROM " + DOCTOR_PRO + " WHERE email = ?";
+                dto.setUsername(jdbcTemplate.queryForObject(query, new Object[]{doctorEmail}, String.class));
+                doctors.add(dto);
+            }
+            return doctors;
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    public ArrayList<ContactDTO> getDoctorContacts(String doctorEmail) {
+        String query = "SELECT parentEmail FROM " + CHILD_PRO + " WHERE doctorEmail = ?";
+        try {
+            ArrayList<String> parentsEmails = (ArrayList<String>) jdbcTemplate.queryForList(query, new Object[]{doctorEmail}, String.class);
+            ArrayList<ContactDTO> parents = new ArrayList<>();
+
+            for (String parentEmail : parentsEmails) {
+                ContactDTO dto = new ContactDTO();
+                dto.setEmail(parentEmail);
+                query = "SELECT username FROM " + PARENT_PRO + " WHERE email = ?";
+                dto.setUsername(jdbcTemplate.queryForObject(query, new Object[]{parentEmail}, String.class));
+                parents.add(dto);
+            }
+            return parents;
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
 
     private String getUserName(UserType userType) {
         switch (userType) {
