@@ -232,3 +232,27 @@ Content-Type: application/json
     - value: email of the child
 - Response Body:
     - Age of the child as integer.
+
+9. Fetch Mentor's (Doctor or Parent) Children Emails and Names
+- Endpoint: /auth/get/mentor/children/emails/and/names
+- Purpose: Retrieves the email addresses and names of children associated with the authenticated mentor user (either a parent or a doctor).
+- Method: GET
+- Request Headers:
+ - Key: Authorization
+ - Value: token
+- Response Body:
+ - List of objects, each containing the email, first name, and last name of a child.
+example response:
+[
+  {
+    "Email": "child1@example.com",
+    "firstName": "Child",
+    "lastName": "One"
+  },
+  {
+    "Email": "child2@example.com",
+    "firstName": "Child",
+    "lastName": "Two"
+  }
+]
+

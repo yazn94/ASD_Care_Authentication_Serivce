@@ -2,6 +2,7 @@ package com.example.authenticationserivce.util;
 
 import com.example.authenticationserivce.database.DAO;
 import com.example.authenticationserivce.enums.UserType;
+import com.example.authenticationserivce.model.MentorChildrenEmailAndNames;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,16 @@ public class UserInfoHelper {
     public ArrayList<String> getParentChildEmails(String token) {
         String parentEmail = JwtTokenUtil.getEmailFromToken(token);
         return dao.getParentChildEmails(parentEmail);
+    }
+
+    public ArrayList<MentorChildrenEmailAndNames> getParentChildrenEmailsAndNames(String token) {
+        String parentEmail = JwtTokenUtil.getEmailFromToken(token);
+        return dao.getParentChildrenEmailsAndNames(parentEmail);
+    }
+
+    public ArrayList<MentorChildrenEmailAndNames> getDoctorChildrenEmailsAndNames(String token) {
+        String parentEmail = JwtTokenUtil.getEmailFromToken(token);
+        return dao.getDoctorChildrenEmailsAndNames(parentEmail);
     }
 
     public ArrayList<String> getDoctorChildEmails(String doctorEmail) {

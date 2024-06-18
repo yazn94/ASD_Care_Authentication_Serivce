@@ -3,6 +3,7 @@ package com.example.authenticationserivce.database;
 import com.example.authenticationserivce.custom_exceptions.DoctorDoesNotExistException;
 import com.example.authenticationserivce.custom_exceptions.UserAlreadyExistsException;
 import com.example.authenticationserivce.enums.UserType;
+import com.example.authenticationserivce.model.MentorChildrenEmailAndNames;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -80,13 +81,12 @@ public class DAO {
             throw new UserAlreadyExistsException("Child with email " + email + " already exists.");
         }
 
-
         // Insert the child profile into the child_profile table
-        String insertQuery = "INSERT INTO " + CHILD_PRO + " (email, firstName, lastName, parentEmail, dateOfBirth, registerDate, currentPoints, pointsSystemAvailability, progress, totalPlayedGames) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String insertQuery = "INSERT INTO " + CHILD_PRO + " (email, firstName, lastName, parentEmail, dateOfBirth, registerDate, currentPoints, pointsSystemAvailability, progress) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             jdbcTemplate.update(insertQuery, email, firstName, lastName, parentEmail, date,
-                    (LocalDate.now()), 0, false, BASE_PROGRESS, 0);
+                    (LocalDate.now()), 0, false, BASE_PROGRESS);
         } catch (Exception e) {
             // Handle any exceptions
             e.printStackTrace();
@@ -223,6 +223,36 @@ public class DAO {
 
         // Calculate the age
         return Period.between(getChildBirthDate(childEmail), LocalDate.now()).getYears();
+    }
+
+    public ArrayList<MentorChildrenEmailAndNames> getParentChildrenEmailsAndNames(String parentEmail) {
+        String query = "SELECT email, firstName, lastName FROM " + CHILD_PRO + " WHERE parentEmail = ?";
+        try {
+            return (ArrayList<MentorChildrenEmailAndNames>) jdbcTemplate.query(query, new Object[]{parentEmail}, (rs, rowNum) -> {
+                MentorChildrenEmailAndNames parentChildrenEmailAndNames = new MentorChildrenEmailAndNames();
+                parentChildrenEmailAndNames.setEmail(rs.getString("email"));
+                parentChildrenEmailAndNames.setFirstName(rs.getString("firstName"));
+                parentChildrenEmailAndNames.setLastName(rs.getString("lastName"));
+                return parentChildrenEmailAndNames;
+            });
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    public ArrayList<MentorChildrenEmailAndNames> getDoctorChildrenEmailsAndNames(String doctorEmail) {
+        String query = "SELECT email, firstName, lastName FROM " + CHILD_PRO + " WHERE doctorEmail = ?";
+        try {
+            return (ArrayList<MentorChildrenEmailAndNames>) jdbcTemplate.query(query, new Object[]{doctorEmail}, (rs, rowNum) -> {
+                MentorChildrenEmailAndNames parentChildrenEmailAndNames = new MentorChildrenEmailAndNames();
+                parentChildrenEmailAndNames.setEmail(rs.getString("email"));
+                parentChildrenEmailAndNames.setFirstName(rs.getString("firstName"));
+                parentChildrenEmailAndNames.setLastName(rs.getString("lastName"));
+                return parentChildrenEmailAndNames;
+            });
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     private String getAuthTableName(UserType userType) {

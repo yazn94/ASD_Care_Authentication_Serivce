@@ -1,6 +1,7 @@
 package com.example.authenticationserivce.controller;
 
 import com.example.authenticationserivce.custom_annotations.ValidJwtToken;
+import com.example.authenticationserivce.enums.UserType;
 import com.example.authenticationserivce.model.EmailRequest;
 import com.example.authenticationserivce.util.JwtTokenUtil;
 import com.example.authenticationserivce.util.UserInfoHelper;
@@ -45,6 +46,19 @@ public class InquiriesController {
     @ValidJwtToken
     public ResponseEntity<?> fetchParentChildrenEmails(@RequestHeader("Authorization") String token) {
         return ResponseEntity.ok().body(userInfoHelper.getParentChildEmails(token));
+    }
+
+    @GetMapping("/mentor/children/emails/and/names")
+    @ValidJwtToken
+    public ResponseEntity<?> fetchMentorChildrenEmailsAndNames(@RequestHeader("Authorization") String token) {
+        UserType userType = JwtTokenUtil.getUserTypeFromToken(token);
+        if (userType == UserType.CHILD) {
+            return ResponseEntity.badRequest().body("This endpoint is only for parent and doctor users");
+        } else if (userType == UserType.DOCTOR) {
+            return ResponseEntity.ok().body(userInfoHelper.getDoctorChildrenEmailsAndNames(token));
+        } else {
+            return ResponseEntity.ok().body(userInfoHelper.getParentChildrenEmailsAndNames(token));
+        }
     }
 
     @GetMapping("/doctor/children")
