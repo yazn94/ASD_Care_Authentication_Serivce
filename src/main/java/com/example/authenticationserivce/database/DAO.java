@@ -31,6 +31,8 @@ public class DAO {
             "    \"gameSummaries\": [],\n" +
             "    \"gamesPlayed\": 0\n" +
             "}";
+    private final String DOC_PARENT_USERNAME_FIELD = "username";
+    private final String CHILD_USERNAME_FIELD = "firstName";
 
     @Autowired
     public DAO(JdbcTemplate jdbcTemplate) {
@@ -166,7 +168,9 @@ public class DAO {
 
     public String getUsername(String email, UserType userType) {
         String tableName = getProfileTableName(userType);
-        String query = "SELECT username FROM " + tableName + " WHERE email = ?";
+        String usernameField = getUserName(userType);
+        String query = "SELECT " + usernameField + " FROM " + tableName + " WHERE email = ?";
+        
         try {
             return jdbcTemplate.queryForObject(query, new Object[]{email}, String.class);
         } catch (EmptyResultDataAccessException e) {
@@ -252,6 +256,16 @@ public class DAO {
             });
         } catch (EmptyResultDataAccessException e) {
             return null;
+        }
+    }
+
+    private String getUserName(UserType userType) {
+        switch (userType) {
+            case PARENT:
+            case DOCTOR:
+                return DOC_PARENT_USERNAME_FIELD;
+            default:
+                return CHILD_USERNAME_FIELD;
         }
     }
 
