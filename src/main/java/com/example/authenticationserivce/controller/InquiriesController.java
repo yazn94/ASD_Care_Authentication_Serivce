@@ -109,4 +109,18 @@ public class InquiriesController {
             return ResponseEntity.badRequest().body("Child users are not allowed to chat");
         }
     }
+
+    // add an endpoints for getting the user type and the email from the token
+
+    @GetMapping("/user/type")
+    @ValidJwtToken
+    public ResponseEntity<UserType> getUserType(@RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok().body(JwtTokenUtil.getUserTypeFromToken(token));
+    }
+
+    @GetMapping("/user/email")
+    @ValidJwtToken
+    public ResponseEntity<String> getUserEmail(@RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok().body(JwtTokenUtil.getEmailFromToken(token));
+    }
 }

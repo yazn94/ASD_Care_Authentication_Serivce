@@ -256,3 +256,22 @@ example response:
   }
 ]
 
+10. Fetch User Type
+- Endpoint: /auth/get/user/type
+- Purpose: Retrieves the type of the authenticated user (child, parent, or doctor).
+- Method: GET
+- Request Headers:
+    - Key: Authorization
+    - Value: token
+- Response Body:
+    - User type ENUM(CHILD, PARENT, DOCTOR)
+
+11. Fetch User Email
+- Endpoint: /auth/get/user/email
+- Purpose: Retrieves the email address of the authenticated user.
+- Method: GET
+- Request Headers:
+    - Key: Authorization
+    - Value: token
+- Response Body:
+    - Email address of the user.
