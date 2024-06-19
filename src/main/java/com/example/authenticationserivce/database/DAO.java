@@ -85,11 +85,11 @@ public class DAO {
         }
 
         // Insert the child profile into the child_profile table
-        String insertQuery = "INSERT INTO " + CHILD_PRO + " (email, firstName, lastName, parentEmail, dateOfBirth, registerDate, currentPoints, pointsSystemAvailability, progress) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String insertQuery = "INSERT INTO " + CHILD_PRO + " (email, firstName, lastName, parentEmail, dateOfBirth, registerDate, currentPoints, pointsSystemAvailability) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             jdbcTemplate.update(insertQuery, email, firstName, lastName, parentEmail, date,
-                    (LocalDate.now()), 0, false, BASE_PROGRESS);
+                    (LocalDate.now()), 0, false);
         } catch (Exception e) {
             // Handle any exceptions
             e.printStackTrace();

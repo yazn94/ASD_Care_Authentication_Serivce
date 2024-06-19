@@ -110,8 +110,6 @@ public class InquiriesController {
         }
     }
 
-    // add an endpoints for getting the user type and the email from the token
-
     @GetMapping("/user/type")
     @ValidJwtToken
     public ResponseEntity<UserType> getUserType(@RequestHeader("Authorization") String token) {
