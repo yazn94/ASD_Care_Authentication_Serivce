@@ -198,6 +198,8 @@
 - Response Body:
     - Age of the child as integer.
 
+--------
+
 7. Fetch Parent's Child Age
 - Endpoint: /auth/get/parent/child/age
 - Purpose: Retrieves the age of a specific child associated with the authenticated parent user.
@@ -220,6 +222,8 @@ Content-Type: application/json
   "email": "yaznyousef94@gmail.com"
 }
 
+--------
+
 8. Fetch Doctor's Child Age
 - Endpoint: /auth/get/doctor/child/age
 - Purpose: Retrieves the age of a specific child associated with the authenticated doctor user.
@@ -232,6 +236,8 @@ Content-Type: application/json
     - value: email of the child
 - Response Body:
     - Age of the child as integer.
+
+--------
 
 9. Fetch Mentor's (Doctor or Parent) Children Emails and Names
 - Endpoint: /auth/get/mentor/children/emails/and/names
@@ -256,6 +262,8 @@ example response:
   }
 ]
 
+--------
+
 10. Fetch User Type
 - Endpoint: /auth/get/user/type
 - Purpose: Retrieves the type of the authenticated user (child, parent, or doctor).
@@ -266,6 +274,8 @@ example response:
 - Response Body:
     - User type ENUM(CHILD, PARENT, DOCTOR)
 
+--------
+
 11. Fetch User Email
 - Endpoint: /auth/get/user/email
 - Purpose: Retrieves the email address of the authenticated user.
@@ -275,3 +285,34 @@ example response:
     - Value: token
 - Response Body:
     - Email address of the user.
+
+--------
+
+12. Fetch username by email and usertype
+- Endpoint: auth/get/username/by/email/and/usertype
+- Purpose: Retrieves the username of the user by email and usertype
+- Method: GET
+- Request Headers:
+    - Key: Authorization
+    - Value: token
+- Request Body:
+    - key: email
+    - key: userType
+- Response Body:
+    - username: String
+
+--------
+
+13. Fetch All Doctors Data
+- Endpoint: /auth/get/all/doctors/data
+- Purpose: Retrieves the email and username of all doctors in the system.
+- Method: GET
+- Request Headers:
+    - Key: Authorization
+    - Value: token
+- Response Body:
+    - List of DoctorData:
+        - email: String
+        - username: String
+
+--------

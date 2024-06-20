@@ -3,6 +3,7 @@ package com.example.authenticationserivce.controller;
 import com.example.authenticationserivce.custom_annotations.ValidJwtToken;
 import com.example.authenticationserivce.enums.UserType;
 import com.example.authenticationserivce.model.EmailRequest;
+import com.example.authenticationserivce.model.GetUsernameRequestInput;
 import com.example.authenticationserivce.util.JwtTokenUtil;
 import com.example.authenticationserivce.util.StringOperations;
 import com.example.authenticationserivce.util.UserContactsHelper;
@@ -92,7 +93,6 @@ public class InquiriesController {
         return ResponseEntity.ok().body(userInfoHelper.getChildAgeForDoctor(doctorEmail, childEmail.getEmail()));
     }
 
-
     @GetMapping("/chat/user/contacts/{email}")
     public ResponseEntity<String> getContacts(@RequestHeader("Authorization") String token, @PathVariable String email) {
         token = StringOperations.removeBearerIfExist(token);
@@ -121,4 +121,22 @@ public class InquiriesController {
     public ResponseEntity<String> getUserEmail(@RequestHeader("Authorization") String token) {
         return ResponseEntity.ok().body(JwtTokenUtil.getEmailFromToken(token));
     }
+
+    // Any user with authenticated token can get the username of another user by providing the email and user type
+    @GetMapping("/username/by/email/and/usertype")
+    @ValidJwtToken
+    public ResponseEntity<String> getUsernameByEmail(@RequestHeader("Authorization") String token, @Valid @RequestBody GetUsernameRequestInput getUsernameRequestInput) {
+        return ResponseEntity.ok().body(userInfoHelper.getUsername(
+                getUsernameRequestInput.getEmail(),
+                getUsernameRequestInput.getUserType())
+        );
+    }
+
+    // Any user with authenticated token can preview the list of all registered doctors in the system
+    @GetMapping("/all/doctors/data")
+    @ValidJwtToken
+    public ResponseEntity<?> getDoctors(@RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok().body(userInfoHelper.getAllRegisteredDoctors());
+    }
 }
+

@@ -4,6 +4,7 @@ import com.example.authenticationserivce.custom_exceptions.DoctorDoesNotExistExc
 import com.example.authenticationserivce.custom_exceptions.UserAlreadyExistsException;
 import com.example.authenticationserivce.enums.UserType;
 import com.example.authenticationserivce.model.ContactDTO;
+import com.example.authenticationserivce.model.DoctorData;
 import com.example.authenticationserivce.model.MentorChildrenEmailAndNames;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -298,6 +299,19 @@ public class DAO {
         }
     }
 
+    public ArrayList<DoctorData> getAllDoctors() {
+        String query = "SELECT email, username FROM " + DOCTOR_PRO;
+        try {
+            return (ArrayList<DoctorData>) jdbcTemplate.query(query, (rs, rowNum) -> {
+                DoctorData doctorData = new DoctorData();
+                doctorData.setEmail(rs.getString("email"));
+                doctorData.setUsername(rs.getString("username"));
+                return doctorData;
+            });
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
 
     private String getUserName(UserType userType) {
         switch (userType) {

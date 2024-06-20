@@ -2,6 +2,7 @@ package com.example.authenticationserivce.util;
 
 import com.example.authenticationserivce.database.DAO;
 import com.example.authenticationserivce.enums.UserType;
+import com.example.authenticationserivce.model.DoctorData;
 import com.example.authenticationserivce.model.MentorChildrenEmailAndNames;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,5 +64,9 @@ public class UserInfoHelper {
 
     public int getChildAgeForDoctor(String doctorEmail, String childEmail) {
         return dao.getChildAgeForDoctor(doctorEmail, childEmail);
+    }
+
+    public ArrayList<DoctorData> getAllRegisteredDoctors() {
+        return dao.getAllDoctors();
     }
 }
