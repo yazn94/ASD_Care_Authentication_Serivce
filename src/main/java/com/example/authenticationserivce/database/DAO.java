@@ -57,6 +57,17 @@ public class DAO {
         jdbcTemplate.update(insertQuery, email, hashedPassword, salt);
     }
 
+
+    public boolean hasDoctor(String childEmail) {
+        String query = "SELECT doctorEmail FROM " + CHILD_PRO + " WHERE email = ?";
+        try {
+            return jdbcTemplate.queryForObject(query, new Object[]{childEmail}, String.class) != null;
+        } catch (EmptyResultDataAccessException e) {
+            return false;
+        }
+    }
+
+
     public String getHashedPasswordByEmail(String email, UserType userType) {
         String tableName = getAuthTableName(userType);
         String query = "SELECT hashedPassword FROM " + tableName + " WHERE email = ?";

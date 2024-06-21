@@ -42,6 +42,10 @@ public class UserInfoHelper {
         return dao.getParentChildrenEmailsAndNames(parentEmail);
     }
 
+    public boolean hasDoctor(String childEmail) {
+        return dao.hasDoctor(childEmail);
+    }
+
     public ArrayList<MentorChildrenEmailAndNames> getDoctorChildrenEmailsAndNames(String token) {
         String parentEmail = JwtTokenUtil.getEmailFromToken(token);
         return dao.getDoctorChildrenEmailsAndNames(parentEmail);

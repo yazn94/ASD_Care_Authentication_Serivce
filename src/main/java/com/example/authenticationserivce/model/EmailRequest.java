@@ -1,6 +1,5 @@
 package com.example.authenticationserivce.model;
 
-import com.example.authenticationserivce.util.StringOperations;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

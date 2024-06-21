@@ -2,6 +2,7 @@ package com.example.authenticationserivce.controller;
 
 import com.example.authenticationserivce.custom_annotations.ValidJwtToken;
 import com.example.authenticationserivce.enums.UserType;
+import com.example.authenticationserivce.model.EmailDTO;
 import com.example.authenticationserivce.model.EmailRequest;
 import com.example.authenticationserivce.model.GetUsernameRequestInput;
 import com.example.authenticationserivce.util.JwtTokenUtil;
@@ -36,15 +37,31 @@ public class InquiriesController {
     // getting the parent email for doctor
     @PostMapping("/child/parent/email/for/doctor")
     @ValidJwtToken
-    public ResponseEntity<String> getParentForDoctor(@RequestHeader("Authorization") String token, @Valid @RequestBody EmailRequest childEmail) {
-        return ResponseEntity.ok().body(userInfoHelper.getChildParentEmail(childEmail.getEmail()));
+    public ResponseEntity<EmailDTO> getParentForDoctor(@RequestHeader("Authorization") String token, @Valid @RequestBody EmailRequest childEmail) {
+        return ResponseEntity.ok().body(
+                new EmailDTO(
+                        userInfoHelper.getChildParentEmail(childEmail.getEmail())
+                )
+        );
+    }
+
+    // check if the child has a doctor assigned
+    @PostMapping("/child/has/doctor")
+    @ValidJwtToken
+    public ResponseEntity<Boolean> hasDoctor(@RequestHeader("Authorization") String token, @Valid @RequestBody EmailRequest childEmail) {
+        return ResponseEntity.ok().body(userInfoHelper.hasDoctor(childEmail.getEmail()));
     }
 
     // getting the doctor email for parent
     @PostMapping("/child/doctor/email/for/parent")
     @ValidJwtToken
-    public ResponseEntity<String> getDoctorForChild(@RequestHeader("Authorization") String token, @Valid @RequestBody EmailRequest childEmail) {
-        return ResponseEntity.ok().body(userInfoHelper.getChildDoctorEmail(childEmail.getEmail()));
+    public ResponseEntity<EmailDTO> getDoctorForChild(@RequestHeader("Authorization") String token, @Valid @RequestBody EmailRequest childEmail) {
+        System.out.println(userInfoHelper.getChildDoctorEmail(childEmail.getEmail()));
+        return ResponseEntity.ok().body(
+                new EmailDTO(
+                        userInfoHelper.getChildDoctorEmail(childEmail.getEmail())
+                )
+        );
     }
 
     @GetMapping("/child/doctor")
@@ -153,4 +170,6 @@ public class InquiriesController {
     public ResponseEntity<?> getDoctors(@RequestHeader("Authorization") String token) {
         return ResponseEntity.ok().body(userInfoHelper.getAllRegisteredDoctors());
     }
+
+
 }
