@@ -79,14 +79,14 @@ public class InquiriesController {
         return ResponseEntity.ok().body(userInfoHelper.getChildAge(token));
     }
 
-    @GetMapping("/parent/child/age")
+    @PostMapping("/parent/child/age")
     @ValidJwtToken
     public ResponseEntity<?> fetchParentChildAge(@RequestHeader("Authorization") String token, @Valid @RequestBody EmailRequest childEmail) {
         String parentEmail = JwtTokenUtil.getEmailFromToken(token);
         return ResponseEntity.ok().body(userInfoHelper.getChildAgeForParent(parentEmail, childEmail.getEmail()));
     }
 
-    @GetMapping("/doctor/child/age")
+    @PostMapping("/doctor/child/age")
     @ValidJwtToken
     public ResponseEntity<?> fetchDoctorChildAge(@RequestHeader("Authorization") String token, @Valid @RequestBody EmailRequest childEmail) {
         String doctorEmail = JwtTokenUtil.getEmailFromToken(token);
@@ -123,7 +123,7 @@ public class InquiriesController {
     }
 
     // Any user with authenticated token can get the username of another user by providing the email and user type
-    @GetMapping("/username/by/email/and/usertype")
+    @PostMapping("/username/by/email/and/usertype")
     @ValidJwtToken
     public ResponseEntity<String> getUsernameByEmail(@RequestHeader("Authorization") String token, @Valid @RequestBody GetUsernameRequestInput getUsernameRequestInput) {
         return ResponseEntity.ok().body(userInfoHelper.getUsername(
@@ -139,4 +139,3 @@ public class InquiriesController {
         return ResponseEntity.ok().body(userInfoHelper.getAllRegisteredDoctors());
     }
 }
-

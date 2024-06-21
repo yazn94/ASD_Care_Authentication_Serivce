@@ -202,8 +202,8 @@
 
 7. Fetch Parent's Child Age
 - Endpoint: /auth/get/parent/child/age
-- Purpose: Retrieves the age of a specific child associated with the authenticated parent user.
-- Method: GET
+- Purpose: Retrieves the age of a specific child associated with the authenticated parent user token.
+- Method: POST
 - Request Headers:
     - Key: Authorization
     - Value: token
@@ -226,8 +226,8 @@ Content-Type: application/json
 
 8. Fetch Doctor's Child Age
 - Endpoint: /auth/get/doctor/child/age
-- Purpose: Retrieves the age of a specific child associated with the authenticated doctor user.
-- Method: GET
+- Purpose: Retrieves the age of a specific child associated with the authenticated doctor user token.
+- Method: POST
 - Request Headers:
     - Key: Authorization
     - Value: token
@@ -291,7 +291,7 @@ example response:
 12. Fetch username by email and usertype
 - Endpoint: auth/get/username/by/email/and/usertype
 - Purpose: Retrieves the username of the user by email and usertype
-- Method: GET
+- Method: POST
 - Request Headers:
     - Key: Authorization
     - Value: token
