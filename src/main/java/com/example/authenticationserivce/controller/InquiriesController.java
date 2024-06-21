@@ -33,6 +33,20 @@ public class InquiriesController {
         return ResponseEntity.ok().body(userInfoHelper.getChildParentEmail(childEmail));
     }
 
+    // getting the parent email for doctor
+    @PostMapping("/child/parent/email/for/doctor")
+    @ValidJwtToken
+    public ResponseEntity<String> getParentForDoctor(@RequestHeader("Authorization") String token, @Valid @RequestBody EmailRequest childEmail) {
+        return ResponseEntity.ok().body(userInfoHelper.getChildParentEmail(childEmail.getEmail()));
+    }
+
+    // getting the doctor email for parent
+    @PostMapping("/child/doctor/email/for/parent")
+    @ValidJwtToken
+    public ResponseEntity<String> getDoctorForChild(@RequestHeader("Authorization") String token, @Valid @RequestBody EmailRequest childEmail) {
+        return ResponseEntity.ok().body(userInfoHelper.getChildDoctorEmail(childEmail.getEmail()));
+    }
+
     @GetMapping("/child/doctor")
     @ValidJwtToken
     public ResponseEntity<String> getDoctor(@RequestHeader("Authorization") String token) {
@@ -109,6 +123,7 @@ public class InquiriesController {
             return ResponseEntity.badRequest().body("Child users are not allowed to chat");
         }
     }
+
 
     @GetMapping("/user/type")
     @ValidJwtToken
