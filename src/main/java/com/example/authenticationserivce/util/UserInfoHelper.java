@@ -51,15 +51,16 @@ public class UserInfoHelper {
         return dao.getDoctorChildrenEmailsAndNames(parentEmail);
     }
 
-    public ArrayList<String> getDoctorChildEmails(String doctorEmail) {
-        return dao.getDoctorChildEmails(doctorEmail);
-    }
-
     public int getChildAge(String token) {
         String childEmail = JwtTokenUtil.getEmailFromToken(token);
         LocalDate date = dao.getChildBirthDate(childEmail);
         LocalDate now = LocalDate.now();
         return Period.between(date, now).getYears();
+    }
+
+    public ArrayList<String> getDoctorChildEmails(String token) {
+        String doctorEmail = JwtTokenUtil.getEmailFromToken(token);
+        return dao.getDoctorChildEmails(doctorEmail);
     }
 
     public int getChildAgeForParent(String parentEmail, String childEmail) {
